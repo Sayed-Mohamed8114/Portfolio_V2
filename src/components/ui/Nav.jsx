@@ -5,20 +5,20 @@ export default function Nav() {
     <header className="header">
       <NavLink
         to="/"
-        className="bg-whte rounded-lg shadow-md items-center justify-center flex w-10 h-10 font-bold"
+        className="bg-white rounded-lg shadow-md items-center justify-center flex w-10 h-10 font-bold"
       >
-        <p className="blue_gradient_text">SM</p>
+        <p className="bg-linear-to-r text-transparent bg-clip-text from-sky-900 to-sky-600">SM</p>
       </NavLink>
       <nav className="flex items-center justify-center text-xl gap-6 font-medium">
         <NavLink
           to={"/about"}
-          className={({isActive}) => (isActive ? `text-blue-500` : "text-black")}
+          className={({isActive}) => (isActive ? `bg-linear-to-r text-transparent bg-clip-text from-sky-900 to-sky-600 font-extrabold` : "font-extrabold text-black")}
         >
             About
         </NavLink>
         <NavLink
           to={"/projects"}
-          className={({isActive}) => (isActive ? `text-blue-500` : "text-black")}
+          className={({isActive}) => (isActive ? `bg-linear-to-r text-transparent bg-clip-text from-sky-900 to-sky-600 font-extrabold` : "text-black font-extrabold")}
         >
             Projects
         </NavLink>

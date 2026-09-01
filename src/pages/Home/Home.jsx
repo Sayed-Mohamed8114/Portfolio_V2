@@ -8,6 +8,7 @@ import Plane from "../../components/models/plane";
 
 export default function Home() {
   const [isRotating, setIsRotating] = useState(false);
+  const [currentStage, setCurrentStage] = useState(1);
 
   const adjustIslandForScreenHome = () => {
     let screenScale = null;
@@ -38,7 +39,7 @@ export default function Home() {
   return (
     <section className="w-full h-screen relative">
       <Canvas
-    style={{touchAction:"none"}}
+        style={{ touchAction: "none" }}
         className={`w-full h-screen bg-transparent ${isRotating ? `cursor-grabbing` : `cursor-grab`} `}
         camera={{ near: 0.1, far: 1000 }}
       >
@@ -54,17 +55,21 @@ export default function Home() {
             groundColor="#000000"
             intensity={1}
           />
-          <Sky />
           <Bird />
-          <Plane 
-          isRotating={isRotating} rotation={[0,20,0]}
-          planeScale={planeScale} planePosition={planePosition} />
+          <Sky isRotating={isRotating} />
+          <Plane
+            isRotating={isRotating}
+            rotation={[0, 20, 0]}
+            planeScale={planeScale}
+            planePosition={planePosition}
+          />
           <Island
             position={islandPosition}
             scale={islandScale}
             rotation={rotation}
             isRotating={isRotating}
             setIsRotating={setIsRotating}
+            setCurrentStage={setCurrentStage}
           />
         </Suspense>
       </Canvas>
