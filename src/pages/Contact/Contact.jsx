@@ -1,6 +1,9 @@
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import { toast } from "sonner";
 import emailjs from "@emailjs/browser";
+import { Canvas } from "@react-three/fiber";
+import { Model } from "../../components/models/fox";
+import Loader from "../../components/common/Loader";
 
 export default function Contact() {
   const [isLoading, setIsLoading] = useState(false);
@@ -10,71 +13,114 @@ export default function Contact() {
     email: "",
     message: "",
   });
+
+  const [currentAnimations, setCurrentAnimations] = useState("idle");
+
   const handleContactForm = (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setCurrentAnimations("hit");
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (formData.name.trim() < 3) {
-      toast.error("please enter a valid user name");
-    } else if (!emailRegex.test(formData.email)) {
-      toast.error("please enter a valid email address");
-    } else if (formData.message.length < 50) {
-      toast.error("message must be more than 50 charachter");
-    } else {
-      emailjs
-        .sendForm(
-          import.meta.env.VITE_EMAILJS_TEMEPLATE_ID,
-          import.meta.env.VITE_EMAILJS_SERVICE_ID,
-          {
-            from_name: formData.name,
-            to_name: "Sayed",
-            from_email: formData.email,
-            to_email: "sayed.mohamed8114@gmail.com",
-          },
-          import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-        )
-        .then(() => {
-          setIsLoading(false);
-          toast.success("Sent correctly");
+
+    if (formData.name.trim().length < 3) {
+      toast.error("Please enter a valid user name");
+      return;
+    }
+
+    if (!emailRegex.test(formData.email.trim())) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    if (formData.message.trim().length < 20) {
+      toast.error("Message must be more than 20 characters");
+      return;
+    }
+
+    setIsLoading(true);
+
+    console.log({
+      serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+      publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      formData,
+    });
+
+    emailjs
+      .send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: formData.name,
+          to_name: "Sayed Mohamed",
+          from_email: formData.email,
+          to_email: "sayed.mohamed8114@gmail.com",
+          message: formData.message,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      )
+
+      .then(() => {
+        setIsLoading(false);
+
+        toast.success("Message sent successfully!");
+
+        setTimeout(() => {
+          setCurrentAnimations("idle");
           setFormData({
             name: "",
             email: "",
             message: "",
           });
-        })
-        .catch(() => {
-          setIsLoading(false);
-          toast.error("unerror has occurred, try again later");
-        });
-    }
+        }, [1500]);
+      })
+      .catch(() => {
+        setIsLoading(false);
+        setCurrentAnimations("idle");
+        toast.error("An error has occurred, try again later");
+      });
   };
 
-  const handleFocus = () => {};
-  const handleBlur = () => {};
+  const handleFocus = () => {
+    setCurrentAnimations("walk");
+  };
+
+  const handleBlur = () => {
+    setCurrentAnimations("idle");
+  };
 
   return (
     <section
       className="bg-linear-to-b flex flex-col 
-    lg:flex-row max-container from-sky-200 to-white 
-    relative w-full min-h-screen"
+      lg:flex-row to-sky-200 from-white 
+      relative w-full min-h-screen mt-30 lg:mt-0 lg:overflow-y-hidden"
     >
       <div className="flex flex-col items-center w-full justify-center">
-        <h1 className="bg-linear-to-r mb-5 font-extrabold font-serif text-5xl from-sky-500 to-sky-900 bg-clip-text text-transparent">
+        <h1
+          className="bg-linear-to-r mb-5 font-extrabold font-serif 
+          text-3xl md:text-5xl from-sky-500 to-sky-900 bg-clip-text text-transparent"
+        >
           Get In Touch
         </h1>
         <form
+          ref={formRef}
           onSubmit={handleContactForm}
-          className="bg-white/50 rounded-lg gap-5 flex flex-col w-[90%] lg:w-[50%] p-10"
+          className="bg-white/70 shadow-lg rounded-lg gap-5 flex flex-col 
+          w-[90%] lg:w-[80%] p-10"
         >
-          <div className="flex flex-col gap-2 ">
+          {/* Name */}
+          <div className="flex flex-col gap-2">
             <label
-              for="name"
-              className="font-serif font-extrabold text-2xl bg-linear-to-l from-black to-sky-500 bg-clip-text text-transparent"
+              htmlFor="name"
+              className="font-serif font-extrabold text-sm  md:text-2xl 
+              bg-linear-to-l from-black to-sky-500 
+              bg-clip-text text-transparent"
             >
               Enter your Name
             </label>
+
             <input
+              id="name"
               onFocus={handleFocus}
               onBlur={handleBlur}
               value={formData.name}
@@ -87,17 +133,24 @@ export default function Contact() {
               type="text"
               name="name"
               placeholder="sayed mohamed"
-              className="bg-sky-100 p-3 outline-sky-300 placeholder:text-gray-400 placeholder:font-bold "
+              className="bg-sky-100 p-3 outline-sky-300 
+              placeholder:text-gray-400 placeholder:font-bold"
             />
           </div>
+
+          {/* Email */}
           <div className="flex flex-col gap-2">
             <label
-              for="email"
-              className="font-serif font-extrabold text-2xl bg-linear-to-l from-black to-sky-500 bg-clip-text text-transparent"
+              htmlFor="email"
+              className="font-serif font-extrabold text-sm  md:text-2xl  
+              bg-linear-to-l from-black to-sky-500 
+              bg-clip-text text-transparent"
             >
               Enter your Email
             </label>
+
             <input
+              id="email"
               onFocus={handleFocus}
               onBlur={handleBlur}
               value={formData.email}
@@ -107,20 +160,27 @@ export default function Contact() {
                   email: e.target.value,
                 })
               }
-              type="text"
+              type="email"
               name="email"
               placeholder="sayed@gmail.com"
-              className="bg-sky-100 p-3 outline-sky-300 placeholder:text-gray-400 placeholder:font-bold "
+              className="bg-sky-100 p-3 outline-sky-300 
+              placeholder:text-gray-400 placeholder:font-bold"
             />
           </div>
+
+          {/* Message */}
           <div className="flex flex-col gap-2">
             <label
               htmlFor="message"
-              className="font-serif font-extrabold text-2xl bg-linear-to-l from-black to-sky-500 bg-clip-text text-transparent"
+              className="font-serif font-extrabold ttext-sm  md:text-2xl 
+              bg-linear-to-l from-black to-sky-500 
+              bg-clip-text text-transparent"
             >
               Enter your message here
             </label>
+
             <textarea
+              id="message"
               onFocus={handleFocus}
               onBlur={handleBlur}
               value={formData.message}
@@ -133,21 +193,59 @@ export default function Contact() {
               rows={6}
               name="message"
               placeholder="enter your message here"
-              className="bg-sky-100 p-3 outline-sky-300 placeholder:text-gray-400 placeholder:font-bold "
+              className="bg-sky-100 p-3 outline-sky-300 
+              placeholder:text-gray-400 placeholder:font-bold"
             />
           </div>
+
+          {/* Submit Button */}
           <button
             onFocus={handleFocus}
             onBlur={handleBlur}
             disabled={isLoading}
             type="submit"
-            className="w-[70%] p-3 text-sky-50 mx-auto  font-extrabold 
-          hover:bg-sky-700 duration-1000 transition cursor-pointer
-          font-serif text-2xl rounded-md bg-sky-900 mt-5 "
+            className="w-[90%] md:w-[70%] p-3 text-sky-50 mx-auto 
+            font-extrabold hover:bg-sky-700 duration-1000 
+            transition cursor-pointer font-serif text-2xl 
+            rounded-md bg-sky-900 mt-5 
+            disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? "Sending....." : "Send Message"}
           </button>
         </form>
+      </div>
+      <div
+        className="lg:w-1/2 w-full lg:h-auto md:h-137.5
+      h-87.5 
+      "
+      >
+        <Canvas
+          camera={{
+            position: [0, 0, 5],
+            fov: 75,
+            near: 0.1,
+            far: 100,
+          }}
+        >
+          <directionalLight intensity={2.5} position={[0, 0, 1]} />
+          <ambientLight intensity={1} />
+          <pointLight position={[5, 10, 0]} intensity={2} />
+          <spotLight
+            position={[10, 10, 10]}
+            angle={0.15}
+            penumbra={1}
+            intensity={2}
+          />
+          <Suspense fallback={<Loader />}>
+            {/*the fox model will be here */}
+            <Model
+              currentAnimations={currentAnimations}
+              position={[0.5, 0.35, 0]}
+              rotation={[0, Math.PI / -4, 0]}
+              scale={[0.5, 0.5, 0.5]}
+            />
+          </Suspense>
+        </Canvas>
       </div>
     </section>
   );
