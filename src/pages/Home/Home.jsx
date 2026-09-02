@@ -3,8 +3,9 @@ import { Suspense, useState } from "react";
 import Loader from "../../components/common/Loader";
 import { Island } from "../../components/models/island";
 import Sky from "../../components/models/sky";
-import Bird from "../../components/models/bird";
 import Plane from "../../components/models/plane";
+import { Bird } from "../../components/models/bird";
+import HomeInfo from "../../components/ui/HomeInfo";
 
 export default function Home() {
   const [isRotating, setIsRotating] = useState(false);
@@ -38,6 +39,9 @@ export default function Home() {
   const [planeScale, planePosition] = adjustPlaneForScreenHome();
   return (
     <section className="w-full h-screen relative">
+      <div className="absolute top-28 left-0 right-0 z-10 flex items-center justify-center">
+        {currentStage && <HomeInfo currentStage={currentStage} />}
+      </div>
       <Canvas
         style={{ touchAction: "none" }}
         className={`w-full h-screen bg-transparent ${isRotating ? `cursor-grabbing` : `cursor-grab`} `}
