@@ -319,7 +319,7 @@ export default function Contact() {
 
         <div
           className="
-            fixed  bottom-0 flex
+            bottom-0 flex fixed left-0
             mt-15
             md:hidden
             items-center
@@ -342,8 +342,8 @@ export default function Contact() {
               rel="noopener noreferrer"
               title={social.name}
               className="
-                w-12
-                h-12
+                w-8
+                h-10
                 flex
                 items-center
                 justify-center
