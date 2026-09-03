@@ -1,0 +1,30 @@
+import {
+  css,
+  express,
+  git,
+  github,
+  html,
+  javascript,
+  mongodb,
+  motion,
+  mui,
+  nodejs,
+  nextjs,
+  react,
+  redux,
+  sass,
+  tailwindcss,
+  typescript,
+} from "../assets/icons/index";
+
+export const skills = [
+  { logo: html },
+  { logo: css },
+  { logo: sass },
+  { logo: tailwindcss },
+  { logo: react },
+  { logo: javascript },
+  { logo: typescript },
+  { logo: git },
+  { logo: github },
+];

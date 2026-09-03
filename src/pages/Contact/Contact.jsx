@@ -2,12 +2,30 @@ import { Suspense, useRef, useState } from "react";
 import { toast } from "sonner";
 import emailjs from "@emailjs/browser";
 import { Canvas } from "@react-three/fiber";
+
 import { Model } from "../../components/models/fox";
 import Loader from "../../components/common/Loader";
 
+import { github, linkedin } from "../../assets/icons";
+
+const socialLinks = [
+  {
+    name: "GitHub",
+    icon: github,
+    url: "https://github.com/Sayed-Mohamed8114",
+  },
+  {
+    name: "LinkedIn",
+    icon: linkedin,
+    url: "https://www.linkedin.com/in/sayed-mohamed-xyz8112004/",
+  },
+];
+
 export default function Contact() {
   const [isLoading, setIsLoading] = useState(false);
+
   const formRef = useRef(null);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,33 +36,31 @@ export default function Contact() {
 
   const handleContactForm = (e) => {
     e.preventDefault();
-    setCurrentAnimations("hit");
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+    // Validate name
     if (formData.name.trim().length < 3) {
       toast.error("Please enter a valid user name");
       return;
     }
 
+    // Validate email
     if (!emailRegex.test(formData.email.trim())) {
       toast.error("Please enter a valid email address");
       return;
     }
 
+    // Validate message
     if (formData.message.trim().length < 20) {
       toast.error("Message must be more than 20 characters");
       return;
     }
 
-    setIsLoading(true);
+    // Start fox animation after validation
+    setCurrentAnimations("hit");
 
-    console.log({
-      serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
-      templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-      publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-      formData,
-    });
+    setIsLoading(true);
 
     emailjs
       .send(
@@ -59,7 +75,6 @@ export default function Contact() {
         },
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
       )
-
       .then(() => {
         setIsLoading(false);
 
@@ -67,16 +82,20 @@ export default function Contact() {
 
         setTimeout(() => {
           setCurrentAnimations("idle");
+
           setFormData({
             name: "",
             email: "",
             message: "",
           });
-        }, [1500]);
+        }, 1500);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error("EmailJS Error:", error);
+
         setIsLoading(false);
         setCurrentAnimations("idle");
+
         toast.error("An error has occurred, try again later");
       });
   };
@@ -91,50 +110,94 @@ export default function Contact() {
 
   return (
     <section
-      className="bg-linear-to-b flex flex-col 
-      lg:flex-row to-sky-200 from-white 
-      relative w-full min-h-screen mt-30 lg:mt-0 lg:overflow-y-hidden"
+      className="
+        bg-linear-to-b
+        from-white
+        to-sky-200
+        flex
+        flex-col
+        lg:flex-row
+        relative
+        w-full
+        min-h-screen
+        mt-30
+        lg:mt-0
+        lg:overflow-y-hidden
+      "
     >
-      <div className="flex flex-col items-center w-full justify-center">
+      <div className="flex flex-col items-center justify-center w-full lg:w-1/2">
         <h1
-          className="bg-linear-to-r mb-5 font-extrabold font-serif 
-          text-3xl md:text-5xl from-sky-500 to-sky-900 bg-clip-text text-transparent"
+          className="
+            bg-linear-to-r
+            mb-5
+            font-extrabold
+            font-serif
+            text-3xl
+            md:text-5xl
+            from-sky-500
+            to-sky-900
+            bg-clip-text
+            text-transparent
+          "
         >
           Get In Touch
         </h1>
+
         <form
           ref={formRef}
           onSubmit={handleContactForm}
-          className="bg-white/70 shadow-lg rounded-lg gap-5 flex flex-col 
-          w-[90%] lg:w-[80%] p-10"
+          className="
+            bg-white/70
+            shadow-lg
+            rounded-lg
+            gap-5
+            flex
+            flex-col
+            w-[90%]
+            lg:w-[80%]
+            p-10
+          "
         >
           {/* Name */}
           <div className="flex flex-col gap-2">
             <label
               htmlFor="name"
-              className="font-serif font-extrabold text-sm  md:text-2xl 
-              bg-linear-to-l from-black to-sky-500 
-              bg-clip-text text-transparent"
+              className="
+                font-serif
+                font-extrabold
+                text-sm
+                md:text-2xl
+                bg-linear-to-l
+                from-black
+                to-sky-500
+                bg-clip-text
+                text-transparent
+              "
             >
               Enter your Name
             </label>
 
             <input
               id="name"
+              type="text"
+              name="name"
+              placeholder="sayed mohamed"
+              value={formData.name}
               onFocus={handleFocus}
               onBlur={handleBlur}
-              value={formData.name}
               onChange={(e) =>
                 setFormData({
                   ...formData,
                   name: e.target.value,
                 })
               }
-              type="text"
-              name="name"
-              placeholder="sayed mohamed"
-              className="bg-sky-100 p-3 outline-sky-300 
-              placeholder:text-gray-400 placeholder:font-bold"
+              className="
+                bg-sky-100
+                p-3
+                outline-sky-300
+                placeholder:text-gray-400
+                placeholder:font-bold
+              "
             />
           </div>
 
@@ -142,29 +205,42 @@ export default function Contact() {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="email"
-              className="font-serif font-extrabold text-sm  md:text-2xl  
-              bg-linear-to-l from-black to-sky-500 
-              bg-clip-text text-transparent"
+              className="
+                font-serif
+                font-extrabold
+                text-sm
+                md:text-2xl
+                bg-linear-to-l
+                from-black
+                to-sky-500
+                bg-clip-text
+                text-transparent
+              "
             >
               Enter your Email
             </label>
 
             <input
               id="email"
+              type="email"
+              name="email"
+              placeholder="sayed@gmail.com"
+              value={formData.email}
               onFocus={handleFocus}
               onBlur={handleBlur}
-              value={formData.email}
               onChange={(e) =>
                 setFormData({
                   ...formData,
                   email: e.target.value,
                 })
               }
-              type="email"
-              name="email"
-              placeholder="sayed@gmail.com"
-              className="bg-sky-100 p-3 outline-sky-300 
-              placeholder:text-gray-400 placeholder:font-bold"
+              className="
+                bg-sky-100
+                p-3
+                outline-sky-300
+                placeholder:text-gray-400
+                placeholder:font-bold
+              "
             />
           </div>
 
@@ -172,52 +248,126 @@ export default function Contact() {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="message"
-              className="font-serif font-extrabold ttext-sm  md:text-2xl 
-              bg-linear-to-l from-black to-sky-500 
-              bg-clip-text text-transparent"
+              className="
+                font-serif
+                font-extrabold
+                text-sm
+                md:text-2xl
+                bg-linear-to-l
+                from-black
+                to-sky-500
+                bg-clip-text
+                text-transparent
+              "
             >
               Enter your message here
             </label>
 
             <textarea
               id="message"
+              name="message"
+              rows={6}
+              placeholder="enter your message here"
+              value={formData.message}
               onFocus={handleFocus}
               onBlur={handleBlur}
-              value={formData.message}
               onChange={(e) =>
                 setFormData({
                   ...formData,
                   message: e.target.value,
                 })
               }
-              rows={6}
-              name="message"
-              placeholder="enter your message here"
-              className="bg-sky-100 p-3 outline-sky-300 
-              placeholder:text-gray-400 placeholder:font-bold"
+              className="
+                bg-sky-100
+                p-3
+                outline-sky-300
+                placeholder:text-gray-400
+                placeholder:font-bold
+              "
             />
           </div>
 
           {/* Submit Button */}
           <button
+            type="submit"
+            disabled={isLoading}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            disabled={isLoading}
-            type="submit"
-            className="w-[90%] md:w-[70%] p-3 text-sky-50 mx-auto 
-            font-extrabold hover:bg-sky-700 duration-1000 
-            transition cursor-pointer font-serif text-2xl 
-            rounded-md bg-sky-900 mt-5 
-            disabled:opacity-50 disabled:cursor-not-allowed"
+            className="
+              w-[90%]
+              md:w-[70%]
+              p-3
+              text-sky-50
+              mx-auto
+              font-extrabold
+              hover:bg-sky-700
+              duration-1000
+              transition
+              cursor-pointer
+              font-serif
+              text-2xl
+              rounded-md
+              bg-sky-900
+              mt-5
+              disabled:opacity-50
+              disabled:cursor-not-allowed
+            "
           >
             {isLoading ? "Sending....." : "Send Message"}
           </button>
         </form>
+
+        <div
+          className="
+            fixed  bottom-0 flex
+            mt-15
+            md:hidden
+            items-center
+            justify-center
+            gap-4
+            mb-5
+            bg-white/70
+            backdrop-blur-md
+            px-3
+            py-1
+            rounded-xl
+            shadow-md
+          "
+        >
+          {socialLinks.map((social) => (
+            <a
+              key={social.name}
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={social.name}
+              className="
+                w-12
+                h-12
+                flex
+                items-center
+                justify-center
+                rounded-lg
+                hover:bg-sky-100
+                hover:scale-110
+                transition-all
+                duration-300
+              "
+            >
+              <img src={social.icon} alt={social.name} className="w-7 h-7" />
+            </a>
+          ))}
+        </div>
       </div>
+
       <div
-        className="lg:w-1/2 w-full lg:h-auto md:h-137.5
-      h-87.5 
-      "
+        className="
+          lg:w-1/2
+          w-full
+          lg:h-screen
+          md:h-137.5
+          h-87.5
+        "
       >
         <Canvas
           camera={{
@@ -228,16 +378,19 @@ export default function Contact() {
           }}
         >
           <directionalLight intensity={2.5} position={[0, 0, 1]} />
+
           <ambientLight intensity={1} />
+
           <pointLight position={[5, 10, 0]} intensity={2} />
+
           <spotLight
             position={[10, 10, 10]}
             angle={0.15}
             penumbra={1}
             intensity={2}
           />
+
           <Suspense fallback={<Loader />}>
-            {/*the fox model will be here */}
             <Model
               currentAnimations={currentAnimations}
               position={[0.5, 0.35, 0]}
@@ -246,6 +399,47 @@ export default function Contact() {
             />
           </Suspense>
         </Canvas>
+      </div>
+
+      <div
+        className="
+          fixed
+          left-0
+          top-1/2
+          -translate-y-1/2
+          z-50
+          hidden
+          md:flex
+          flex-col
+          bg-white/80
+          backdrop-blur-md
+          shadow-lg
+          rounded-r-xl
+          overflow-hidden
+        "
+      >
+        {socialLinks.map((social) => (
+          <a
+            key={social.name}
+            href={social.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={social.name}
+            className="
+              w-14
+              h-14
+              flex
+              items-center
+              justify-center
+              hover:bg-sky-100
+              hover:scale-110
+              transition-all
+              duration-300
+            "
+          >
+            <img src={social.icon} alt={social.name} className="w-7 h-7" />
+          </a>
+        ))}
       </div>
     </section>
   );

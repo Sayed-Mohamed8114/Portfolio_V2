@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <Toaster />
-      <main className="bg-slate-300/20">
+      <main className="bg-slate-300/20 h-screen">
         <BrowserRouter>
           <Nav />
           <Routes>
