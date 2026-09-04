@@ -1,16 +1,70 @@
-# React + Vite
+# 3D Interactive Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> A modern, interactive 3D portfolio built to showcase my projects, skills, and journey as a Frontend Developer.
 
-Currently, two official plugins are available:
+Welcome to my **3D Portfolio** — a personal website designed to be more than just a traditional portfolio.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Instead of presenting my work through static sections, I built an **interactive 3D experience** that combines modern frontend development with immersive visuals and smooth interactions.
 
-## React Compiler
+## overview 
+<p align="center">
+  <img src="./src/assets/mainReadme.png" width="800" alt="3D Portfolio Preview">
+</p>
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+##  Features
 
-## Expanding the ESLint configuration
+*  Interactive 3D environment
+*  Modern and responsive UI
+* Smooth animations and transitions
+*  Fully responsive across devices
+*  Client-side navigation with React Router
+*  Dedicated projects showcase
+*  Contact section
+*  Clean and reusable component structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+##  Built With
+
+* **React.js** — Frontend framework
+* **Three.js** — 3D graphics and interactive scenes
+* **React Three Fiber** — React renderer for Three.js
+* **Tailwind CSS** — Styling and responsive design
+* **React Router** — Client-side routing
+* **Vite** — Development and build tooling
+
+## Explore the Portfolio
+
+ **Live Demo:**
+[Visit My Portfolio](https://portfolio-v2-rho-red.vercel.app/)
+
+##  Project Structure
+
+The project follows a reusable and organized React architecture, separating:
+
+* Components
+* Pages
+* Constants
+* Assets
+* 3D elements
+* Routing
+* Reusable UI sections
+
+This makes the project easier to maintain, extend, and scale.
+
+## Purpose
+
+I built this project to challenge myself beyond standard CRUD applications and explore how **3D experiences can be integrated into modern web applications**.
+
+It also represents my approach to frontend development:
+
+**Clean code + good UI + interaction + performance.**
+
+## About Me
+
+I'm **Sayed Mohamed**, a Computer Science student and Frontend Developer interested in building modern web experiences and continuously improving my skills in software engineering.
+
+I'm currently focused on **React, TypeScript, modern frontend architecture, and backend development**.
+
+If you like the project, feel free to ⭐ the repository or check out some of my other projects.
+
+---
+
